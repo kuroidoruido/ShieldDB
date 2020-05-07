@@ -82,3 +82,13 @@ final List<User> userDb = ShieldDB.<User>builder()
 
 
 See more usage example here: https://github.com/kuroidoruido/ShieldDB/tree/master/shielddb-demo-app/
+
+## Release process
+
+- ensure snapshot deploys: mvn clean deploy
+- set all packages to a release version: mvn versions:set -DnewVersion=1.0.0
+- commit changes
+- deploy release: mvn clean deploy
+- await new release is visible on maven central: https://repo1.maven.org/maven2/nf/fr/k49/
+- set all packages to the next snapshot version: mvn versions:set -DnewVersion=1.0.1-SNAPSHOT
+- commit changes
