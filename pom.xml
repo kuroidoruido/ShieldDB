@@ -7,6 +7,29 @@
 	<version>0.1.1</version>
 	<packaging>pom</packaging>
 
+	<name>shieldb</name>
+ 	<description>ShieldDB is a simple embedded database with JSON file backend with optional in-memory read cache.</description>
+	<url>https://github.com/kuroidoruido/ShieldDB</url>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://mit-license.org/</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Anthony Pena</name>
+			<email>anthony.pena@outlook.fr</email>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/kuroidoruido/ShieldDB.git</connection>
+		<developerConnection>scm:git:ssh://github.com:kuroidoruido/ShieldDB.git</developerConnection>
+		<url>http://github.com/kuroidoruido/ShieldDB/ tree/master</url>
+	</scm>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -17,4 +40,74 @@
 		<module>shielddb-demo-app</module>
 		<module>shielddb-gson-backend</module>
 	</modules>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+					<id>attach-sources</id>
+					<goals>
+						<goal>jar-no-fork</goal>
+					</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+					<id>attach-javadocs</id>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<keyname>${gpg.keyname}</keyname>
+							<passphraseServerId>${gpg.keyname}</passphraseServerId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
