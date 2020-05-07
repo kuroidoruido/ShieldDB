@@ -20,7 +20,7 @@ ShieldDB is a simple embedded database with JSON file backend with optional in-m
 	<dependency>
 		<groupId>nf.fr.k49</groupId>
 		<artifactId>shielddb-core</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1</version>
 	</dependency>
 	...
 </dependencies>
@@ -36,7 +36,7 @@ ShieldDB is a simple embedded database with JSON file backend with optional in-m
 	<dependency>
 		<groupId>nf.fr.k49</groupId>
 		<artifactId>shielddb-gson-backend</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1</version>
 	</dependency>
 	...
 </dependencies>
