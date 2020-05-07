@@ -20,8 +20,8 @@ public class FileStorage implements ShieldDBStorage {
 	 * Same as #FileStorage(String, Charset) with a default Charset set to
 	 * StandardCharsets.UTF_8.
 	 * 
-	 * @param path
-	 * @throws IOException
+	 * @param path the path of the json file
+	 * @throws IOException if an error occured when reading the file.
 	 */
 	public FileStorage(final String path) throws IOException {
 		this(path, StandardCharsets.UTF_8);
