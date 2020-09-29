@@ -9,11 +9,15 @@ ShieldDB is a simple embedded database with JSON file backend with optional in-m
 - No mandatory external dependencies
 - No reflection API usage (except for some json mapper implementation like Gson)
 
+## Contributing to ShielDB
+
+If you want to contribute to ShieldDB or if you want better know how ShieldDB is working, you can check the [DEVELOPER.md](DEVELOPER.md).
+
 ## How to use it?
 
 ### Add the core dependency
 
-```
+```xml
 ...
 <dependencies>
 	...
@@ -29,7 +33,7 @@ ShieldDB is a simple embedded database with JSON file backend with optional in-m
 
 ### Add as dependency a mapper
 
-```
+```xml
 ...
 <dependencies>
 	...
@@ -48,7 +52,7 @@ Note: At this time, there is only a Gson mapper implementation. But you can make
 ### Initialize a ShieldDB instance
 
 Create a bean class:
-```
+```java
 public class User {
 	private String firstname;
 	private String lastname;
@@ -58,7 +62,7 @@ public class User {
 }
 ```
 
-```
+```java
 final List<User> userDb = ShieldDB.<User>builder()
 		.mapper(new ShieldDBGson<User>())
 		.storage(new FileStorage("User.json"))
@@ -69,7 +73,7 @@ Note: If you want to store a type that has no custom equals implementation, you 
 
 ### (Optional) Add some shield to customize the way ShieldDB will read/write
 
-```
+```java
 final List<User> userDb = ShieldDB.<User>builder()
 		.shield(new AtomicShield())// ensure only one thread use userDb
 		.shield(new ReadOnlyShield())// throw an UnsupportedOperationException on write access
