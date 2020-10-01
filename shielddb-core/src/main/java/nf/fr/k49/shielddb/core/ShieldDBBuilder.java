@@ -1,6 +1,7 @@
 package nf.fr.k49.shielddb.core;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import nf.fr.k49.shielddb.core.json.ShieldDBJsonMapper;
@@ -21,13 +22,21 @@ public class ShieldDBBuilder<T> {
 	public List<T> build() {
 		final BottomShield<T> bottom = new BottomShield<>(mapper, storage);
 		shields.add(bottom);
-		for(int i = 0; i < shields.size()-1 ; i++) {
-			final ShieldDBShield<T> cur = shields.get(i);
-			final ShieldDBShield<T> next = shields.get(i+1);
-			cur.setNextShield(next);
-		}
+		doNestShields();
 		return shields.get(0);
 	}
+
+	private void doNestShields() {
+		Iterator<ShieldDBShield<T>> shieldIterator = shields.iterator();
+
+		ShieldDBShield<T> bindTo = shieldIterator.next();
+		while (shieldIterator.hasNext()) {
+			ShieldDBShield<T> current = shieldIterator.next();
+			bindTo.setNextShield(current);
+			bindTo = current;
+		}
+	}
+
 
 	/**
 	 * Sets the storage engine.
