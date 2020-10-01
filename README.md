@@ -1,5 +1,7 @@
 # ShieldDB
 
+![Build](https://github.com/kuroidoruido/ShieldDB/workflows/Build/badge.svg)
+    
 ShieldDB is a simple embedded database with JSON file backend with optional in-memory read cache.
 
 ## Features
