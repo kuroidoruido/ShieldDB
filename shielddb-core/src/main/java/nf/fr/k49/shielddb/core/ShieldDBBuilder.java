@@ -31,6 +31,9 @@ public class ShieldDBBuilder<T> {
 
 	/**
 	 * Sets the storage engine.
+	 * 
+	 * @param storage set the storage implementation to use.
+	 * @return the current ShieldDBBuilder instance.
 	 */
 	public ShieldDBBuilder<T> storage(ShieldDBStorage storage) {
 		this.storage = storage;
@@ -39,6 +42,9 @@ public class ShieldDBBuilder<T> {
 
 	/**
 	 * Sets the json mapper.
+	 * 
+	 * @param mapper set the json mapper implementation to use.
+	 * @return the current ShieldDBBuilder instance.
 	 */
 	public ShieldDBBuilder<T> mapper(ShieldDBJsonMapper<T> mapper) {
 		this.mapper = mapper;
@@ -47,6 +53,9 @@ public class ShieldDBBuilder<T> {
 
 	/**
 	 * Adds a new Shield to protect the file.
+	 * 
+	 * @param shield add shield to add.
+	 * @return the current ShieldDBBuilder instance.
 	 */
 	public ShieldDBBuilder<T> shield(ShieldDBShield<T> shield) {
 		this.shields.add(shield);
