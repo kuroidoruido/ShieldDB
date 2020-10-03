@@ -22,19 +22,16 @@ public class ShieldDBBuilder<T> {
 	public List<T> build() {
 		final BottomShield<T> bottom = new BottomShield<>(mapper, storage);
 		shields.add(bottom);
-		doNestShields();
-		return shields.get(0);
-	}
 
-	private void doNestShields() {
 		Iterator<ShieldDBShield<T>> shieldIterator = shields.iterator();
-
-		ShieldDBShield<T> bindTo = shieldIterator.next();
+		ShieldDBShield<T> outerShield = shieldIterator.next();
 		while (shieldIterator.hasNext()) {
-			ShieldDBShield<T> current = shieldIterator.next();
-			bindTo.setNextShield(current);
-			bindTo = current;
+			ShieldDBShield<T> innerShield = shieldIterator.next();
+			outerShield.setNextShield(innerShield);
+			outerShield = innerShield;
 		}
+
+		return shields.get(0);
 	}
 
 
