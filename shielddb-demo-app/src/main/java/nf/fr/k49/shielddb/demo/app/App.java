@@ -1,5 +1,16 @@
 package nf.fr.k49.shielddb.demo.app;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import nf.fr.k49.shielddb.core.ShieldDB;
+import nf.fr.k49.shielddb.core.shield.AtomicShield;
+import nf.fr.k49.shielddb.core.shield.InMemoryArrayListReadCacheShield;
+import nf.fr.k49.shielddb.core.storage.FileStorage;
+import nf.fr.k49.shielddb.demo.app.model1.User;
+import nf.fr.k49.shielddb.demo.app.model1.UserDeserializer;
+import nf.fr.k49.shielddb.gson.GsonTypeUtils;
+import nf.fr.k49.shielddb.gson.ShieldDBGson;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -11,18 +22,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import nf.fr.k49.shielddb.core.ShieldDB;
-import nf.fr.k49.shielddb.core.shield.AtomicShield;
-import nf.fr.k49.shielddb.core.shield.InMemoryArrayListReadCacheShield;
-import nf.fr.k49.shielddb.core.storage.FileStorage;
-import nf.fr.k49.shielddb.demo.app.model1.User;
-import nf.fr.k49.shielddb.demo.app.model1.UserDeserializer;
-import nf.fr.k49.shielddb.gson.GsonTypeUtils;
-import nf.fr.k49.shielddb.gson.ShieldDBGson;
 
 public class App {
 
@@ -134,9 +133,14 @@ public class App {
 		}
 		executor.invokeAll(tasks);
 		Thread.sleep(5000);
-
+		executor.shutdownNow();
 		System.out.println(userDb.size() + " -> " + userDb.toString());
 	}
+
+
+
+
+
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		setup();
