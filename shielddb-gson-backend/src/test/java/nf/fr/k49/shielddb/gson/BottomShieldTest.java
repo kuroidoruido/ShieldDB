@@ -30,7 +30,6 @@ public class BottomShieldTest {
         storage = spy(new FileStorage(storagePath));
 
         String json = "[ \"String1\", \"String2\", \"String3\" ]";
-
         storage.write(json);
     }
 
