@@ -1,19 +1,20 @@
 package nf.fr.k49.shielddb.gson;
 
+import nf.fr.k49.shielddb.core.ShieldDBIOException;
 import nf.fr.k49.shielddb.core.shield.BottomShield;
 import nf.fr.k49.shielddb.core.storage.FileStorage;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 
 public class BottomShieldTest {
@@ -22,10 +23,7 @@ public class BottomShieldTest {
 
     private FileStorage storage;
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         String storagePath = BASE_DIR + "/User.json";
 
@@ -36,7 +34,7 @@ public class BottomShieldTest {
         storage.write(json);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws IOException {
         storage.clear();
     }
@@ -51,6 +49,16 @@ public class BottomShieldTest {
     }
 
     @Test
+    public void onIOExceptionDuringReadShieldDbIOExceptionWillBePropagated() throws IOException {
+        doThrow(new IOException()).when(storage).read();
+
+        BottomShield<String> bottomShield = new BottomShield<>(new ShieldDBGson<>(), storage);
+
+        assertThrows(ShieldDBIOException.class, bottomShield::size);
+    }
+
+
+    @Test
     public void jsonWillBeCorrectlySaved() throws IOException {
         ShieldDBGson<String> mapper = new ShieldDBGson<>();
 
@@ -63,6 +71,17 @@ public class BottomShieldTest {
         List<String> savedList = mapper.toList(storage.read());
 
         assertThat(savedList.size(), is(4));
+    }
+
+    @Test
+    public void onIOExceptionDuringSaveShieldDbIOExceptionWillBePropagated() throws IOException {
+        doThrow(new IOException()).when(storage).read();
+
+        BottomShield<String> bottomShield = new BottomShield<>(new ShieldDBGson<>(), storage);
+
+        assertThrows(ShieldDBIOException.class, () -> {
+            bottomShield.add("String4");
+        });
     }
 
 }
