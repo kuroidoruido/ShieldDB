@@ -1,7 +1,7 @@
 package nf.fr.k49.shielddb.gson;
 
 import com.google.gson.Gson;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
