@@ -20,7 +20,6 @@ public interface BaseShieldDBBuilderTest<T> {
 
     @Test
     default void firstShieldPlacedAtBeginningOfShield() {
-
         ShieldDBShield<T> anyFirstShield = mock(ShieldDBShield.class);
         ShieldDBShield<T> anySecondShield = mock(ShieldDBShield.class);
 

@@ -10,7 +10,6 @@ import nf.fr.k49.shielddb.demo.app.model1.User;
 import nf.fr.k49.shielddb.demo.app.model1.UserDeserializer;
 import nf.fr.k49.shielddb.gson.GsonTypeUtils;
 import nf.fr.k49.shielddb.gson.ShieldDBGson;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -136,11 +135,6 @@ public class App {
 		executor.shutdownNow();
 		System.out.println(userDb.size() + " -> " + userDb.toString());
 	}
-
-
-
-
-
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		setup();
