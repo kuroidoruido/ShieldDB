@@ -2,6 +2,7 @@ package nf.fr.k49.shielddb.core.shield;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -185,5 +186,11 @@ public class BottomShield<T> implements ShieldDBShield<T> {
 	@Override
 	public String toString() {
 		return read().toString();
+	}
+
+	public void sort(Comparator<? super T> c) {
+		final List<T> l = read();
+		l.sort(c);
+		save(l);
 	}
 }

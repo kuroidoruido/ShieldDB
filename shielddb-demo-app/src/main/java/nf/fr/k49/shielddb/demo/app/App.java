@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +29,7 @@ public class App {
 
 	private static final User USER_EMPTY = new User();
 	private static final User USER_STAN_LEE = new User("Stan", "Lee", 95, LocalDate.of(1922, 12, 28));
+	private static final User USER_JACK_KIRBY = new User("Jack", "Kirby", 76, LocalDate.of(1917, 8, 17));
 
 	private static void setup() throws IOException {
 		Path path = Paths.get(BASE_DIR);
@@ -136,6 +138,27 @@ public class App {
 		System.out.println(userDb.size() + " -> " + userDb.toString());
 	}
 
+	private static void model1SortingElementsWillWriteElementInSortedOrderExample() throws IOException {
+		final String storagePath = BASE_DIR + "/User4.json";
+		System.out.println(Paths.get(storagePath).toAbsolutePath());
+
+		Type type = GsonTypeUtils.getType();
+		Gson gson = new GsonBuilder()//
+			.setPrettyPrinting()//
+			.registerTypeAdapter(type, new UserDeserializer())//
+			.create();
+
+		final List<User> userDb = ShieldDB.<User>builder()//
+				.mapper(new ShieldDBGson<User>(gson, type))//
+				.storage(new FileStorage(storagePath))//
+				.build();
+
+		userDb.add(USER_STAN_LEE);
+		userDb.add(USER_JACK_KIRBY);
+		userDb.sort(Comparator.comparing(User::getFirstname));
+		System.out.println(userDb.toString());
+	}
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 		setup();
 
@@ -146,6 +169,8 @@ public class App {
 		model1UserWithDeserializer();
 		System.out.println("-----------------------------------");
 		model1UserAtomic();
+		System.out.println("-----------------------------------");
+		model1SortingElementsWillWriteElementInSortedOrderExample();
 		System.out.println("-----------------------------------");
 	}
 }
