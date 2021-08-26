@@ -54,7 +54,7 @@ public class FileStorage implements ShieldDBStorage {
 		this.backupPath = Paths.get(path + ".backup").toAbsolutePath();
 		this.charset = charset;
 
-		if (File.pathSeparator.contains(path)) {
+		if (path.contains(File.separator)) {
 			this.parentDir.toFile().mkdirs();
 		}
 	}
