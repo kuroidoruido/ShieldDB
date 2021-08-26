@@ -8,6 +8,7 @@
 	<name>shieldb</name>
 	<description>ShieldDB is a simple embedded database with JSON file backend with optional in-memory read cache.</description>
 	<url>https://github.com/kuroidoruido/ShieldDB</url>
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -38,11 +39,13 @@
 		<guava.version>30.1.1-jre</guava.version>
 		<commons-lang.version>3.12.0</commons-lang.version>
 	</properties>
+
 	<modules>
 		<module>shielddb-core</module>
 		<module>shielddb-demo-app</module>
 		<module>shielddb-gson-backend</module>
 	</modules>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -79,6 +82,18 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<!-- Commons utils dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+	</dependencies>
 
 	<distributionManagement>
 		<snapshotRepository>

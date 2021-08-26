@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import org.apache.commons.lang3.StringUtils;
+
 import nf.fr.k49.shielddb.core.json.ShieldDBJsonMapper;
 
 public class ShieldDBGson<T> implements ShieldDBJsonMapper<T> {
@@ -28,7 +30,7 @@ public class ShieldDBGson<T> implements ShieldDBJsonMapper<T> {
 
 	@Override
 	public List<T> toList(String json) {
-		if (json == null || json.length() == 0) {
+		if (StringUtils.isNotBlank(json)) {
 			return new ArrayList<>();
 		}
 		return new ArrayList<>(gson.fromJson(json, collectionType));

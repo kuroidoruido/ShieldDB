@@ -9,13 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Collectors;
-
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.google.common.base.Preconditions.checkArgument;
-
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class FileStorage implements ShieldDBStorage {
@@ -25,7 +24,6 @@ public class FileStorage implements ShieldDBStorage {
 	private final Lock readLock = readWriteLock.readLock();
  
     private final Lock writeLock = readWriteLock.writeLock();
-     
 
 	private Path parentDir;
 	private Path path;
@@ -49,12 +47,13 @@ public class FileStorage implements ShieldDBStorage {
 
 	public FileStorage(final String path, final Charset charset) throws IOException {
 		checkArgument(isNotBlank(path), "Path cannot be null or empty");
+		checkArgument(Objects.nonNull(charset), "Charset cannot be null");
 		this.path = Paths.get(path).toAbsolutePath();
 		this.parentDir = this.path.getParent();
 		this.backupPath = Paths.get(path + ".backup").toAbsolutePath();
 		this.charset = charset;
 
-		if (File.pathSeparator.contains(path)) {
+		if (path.contains(File.separator)) {
 			this.parentDir.toFile().mkdirs();
 		}
 	}
