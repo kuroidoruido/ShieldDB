@@ -1,5 +1,6 @@
 package nf.fr.k49.shielddb.core.storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -9,7 +10,22 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Collectors;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static com.google.common.base.Preconditions.checkArgument;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 public class FileStorage implements ShieldDBStorage {
+
+	private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
+	private final Lock readLock = readWriteLock.readLock();
+ 
+    private final Lock writeLock = readWriteLock.writeLock();
+     
 
 	private Path parentDir;
 	private Path path;
@@ -32,29 +48,41 @@ public class FileStorage implements ShieldDBStorage {
 	}
 
 	public FileStorage(final String path, final Charset charset) throws IOException {
+		checkArgument(isNotBlank(path), "Path cannot be null or empty");
 		this.path = Paths.get(path).toAbsolutePath();
 		this.parentDir = this.path.getParent();
 		this.backupPath = Paths.get(path + ".backup").toAbsolutePath();
 		this.charset = charset;
 
-		if (path.contains("/") || path.contains("\\")) {
+		if (File.pathSeparator.contains(path)) {
 			this.parentDir.toFile().mkdirs();
 		}
 	}
 
 	@Override
 	public synchronized String read() throws IOException {
-		return Files.readAllLines(path, charset).stream().collect(Collectors.joining(""));
+		try {
+			readLock.lock();
+			return Files.readAllLines(path, charset).stream().collect(Collectors.joining(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			readLock.unlock();
+		}
+		return null;
 	}
 
 	@Override
 	public synchronized void write(String json) throws IOException {
+		writeLock.lock();
+		checkArgument(isNotBlank(json), "JSON cannot be null or empty");
 		final Path tmp = Files.createTempFile(this.parentDir, "ShieldDB_", ".temp");
 		Files.write(tmp, json.getBytes());
 		Files.move(path, backupPath, StandardCopyOption.ATOMIC_MOVE);
 		Files.move(tmp, path, StandardCopyOption.ATOMIC_MOVE);
 		Files.deleteIfExists(tmp);
 		Files.deleteIfExists(backupPath);
+		writeLock.unlock();
 	}
 
 	@Override

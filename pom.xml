@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nf.fr.k49</groupId>
 	<artifactId>shielddb-parent</artifactId>
@@ -8,7 +6,7 @@
 	<packaging>pom</packaging>
 
 	<name>shieldb</name>
- 	<description>ShieldDB is a simple embedded database with JSON file backend with optional in-memory read cache.</description>
+	<description>ShieldDB is a simple embedded database with JSON file backend with optional in-memory read cache.</description>
 	<url>https://github.com/kuroidoruido/ShieldDB</url>
 	<licenses>
 		<license>
@@ -37,13 +35,15 @@
 		<junit-jupiter-api.version>5.7.0</junit-jupiter-api.version>
 		<hamcrest.version>2.2</hamcrest.version>
 		<mockito.version>3.5.13</mockito.version>
+		<guava.version>30.1.1-jre</guava.version>
+		<commons-lang.version>3.12.0</commons-lang.version>
 	</properties>
 	<modules>
 		<module>shielddb-core</module>
 		<module>shielddb-demo-app</module>
 		<module>shielddb-gson-backend</module>
 	</modules>
-  <dependencyManagement>
+	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
@@ -67,8 +67,19 @@
 				<version>${mockito.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -79,6 +90,7 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -92,10 +104,10 @@
 				<version>3.2.1</version>
 				<executions>
 					<execution>
-					<id>attach-sources</id>
-					<goals>
-						<goal>jar-no-fork</goal>
-					</goals>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -105,10 +117,10 @@
 				<version>3.2.0</version>
 				<executions>
 					<execution>
-					<id>attach-javadocs</id>
-					<goals>
-						<goal>jar</goal>
-					</goals>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -141,11 +153,11 @@
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M5</version>
-      </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+			</plugin>
 		</plugins>
 	</build>
 </project>
