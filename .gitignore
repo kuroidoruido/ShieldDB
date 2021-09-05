@@ -1,6 +1,7 @@
 # Created by https://www.gitignore.io/api/maven
 # Edit at https://www.gitignore.io/?templates=maven
 
+.idea/
 ### Maven ###
 target/
 pom.xml.tag
@@ -90,3 +91,6 @@ local.properties
 .sts4-cache/
 
 # End of https://www.gitignore.io/api/eclipse
+
+### VS Code ###
+.history/

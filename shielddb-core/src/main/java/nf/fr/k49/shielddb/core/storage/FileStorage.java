@@ -1,5 +1,6 @@
 package nf.fr.k49.shielddb.core.storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -8,13 +9,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class FileStorage implements ShieldDBStorage {
 
-	private Path parentDir;
-	private Path path;
-	private Path backupPath;
-	private Charset charset;
+	private final ReadWriteLock readWriteLock;
+
+	private final Path parentDir;
+	private final Path path;
+	private final Path backupPath;
+	private final Charset charset;
 
 	/**
 	 * Same as #FileStorage(String, Charset) with a default Charset set to
@@ -32,29 +41,43 @@ public class FileStorage implements ShieldDBStorage {
 	}
 
 	public FileStorage(final String path, final Charset charset) throws IOException {
+		checkArgument(isNotBlank(path), "Path cannot be null or empty");
+		checkArgument(Objects.nonNull(charset), "Charset cannot be null");
 		this.path = Paths.get(path).toAbsolutePath();
 		this.parentDir = this.path.getParent();
 		this.backupPath = Paths.get(path + ".backup").toAbsolutePath();
 		this.charset = charset;
+		this.readWriteLock = new ReentrantReadWriteLock();
 
-		if (path.contains("/") || path.contains("\\")) {
+		if (path.contains(File.separator)) {
 			this.parentDir.toFile().mkdirs();
 		}
 	}
 
 	@Override
-	public synchronized String read() throws IOException {
-		return Files.readAllLines(path, charset).stream().collect(Collectors.joining(""));
+	public String read() throws IOException {
+		try {
+			readWriteLock.readLock().lock();
+			return Files.readAllLines(path, charset).stream().collect(Collectors.joining(""));
+		} finally {
+			readWriteLock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized void write(String json) throws IOException {
-		final Path tmp = Files.createTempFile(this.parentDir, "ShieldDB_", ".temp");
-		Files.write(tmp, json.getBytes());
-		Files.move(path, backupPath, StandardCopyOption.ATOMIC_MOVE);
-		Files.move(tmp, path, StandardCopyOption.ATOMIC_MOVE);
-		Files.deleteIfExists(tmp);
-		Files.deleteIfExists(backupPath);
+	public void write(String json) throws IOException {
+		try {
+			readWriteLock.writeLock().lock();
+			checkArgument(isNotBlank(json), "JSON cannot be null or empty");
+			final Path tmp = Files.createTempFile(this.parentDir, "ShieldDB_", ".temp");
+			Files.write(tmp, json.getBytes());			
+			Files.move(path, backupPath, StandardCopyOption.ATOMIC_MOVE);
+			Files.move(tmp, path, StandardCopyOption.ATOMIC_MOVE);
+			Files.deleteIfExists(tmp);
+			Files.deleteIfExists(backupPath);
+		} finally {
+			readWriteLock.writeLock().unlock();
+		}
 	}
 
 	@Override
