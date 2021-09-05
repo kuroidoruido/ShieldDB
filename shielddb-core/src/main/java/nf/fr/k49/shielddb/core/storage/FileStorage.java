@@ -70,14 +70,9 @@ public class FileStorage implements ShieldDBStorage {
 			readWriteLock.writeLock().lock();
 			checkArgument(isNotBlank(json), "JSON cannot be null or empty");
 			final Path tmp = Files.createTempFile(this.parentDir, "ShieldDB_", ".temp");
-			Files.write(tmp, json.getBytes());
-			try {
-				readWriteLock.readLock().lock();
-				Files.move(path, backupPath, StandardCopyOption.ATOMIC_MOVE);
-				Files.move(tmp, path, StandardCopyOption.ATOMIC_MOVE);
-			} finally {
-				readWriteLock.readLock().unlock();
-			}
+			Files.write(tmp, json.getBytes());			
+			Files.move(path, backupPath, StandardCopyOption.ATOMIC_MOVE);
+			Files.move(tmp, path, StandardCopyOption.ATOMIC_MOVE);
 			Files.deleteIfExists(tmp);
 			Files.deleteIfExists(backupPath);
 		} finally {
