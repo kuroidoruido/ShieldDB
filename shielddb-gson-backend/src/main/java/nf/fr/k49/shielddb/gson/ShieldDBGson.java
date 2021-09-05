@@ -30,7 +30,7 @@ public class ShieldDBGson<T> implements ShieldDBJsonMapper<T> {
 
 	@Override
 	public List<T> toList(String json) {
-		if (StringUtils.isNotBlank(json)) {
+		if (StringUtils.isBlank(json)) {
 			return new ArrayList<>();
 		}
 		return new ArrayList<>(gson.fromJson(json, collectionType));
